@@ -1,0 +1,294 @@
+/* PulseVision Modern Glassmorphic Dark Navy & Cyan Theme */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap');
+
+/* Base Streamlit App Styling */
+.stApp {
+    background: radial-gradient(circle at 15% 15%, #0B163B 0%, #070B19 60%, #03060F 100%);
+    color: #F8FAFC;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+/* Sidebar Styling */
+section[data-testid="stSidebar"] {
+    background: linear-gradient(180deg, #0D183B 0%, #070B1B 100%) !important;
+    border-right: 1px solid rgba(0, 242, 254, 0.15) !important;
+    box-shadow: 4px 0 24px rgba(0, 0, 0, 0.4);
+}
+
+section[data-testid="stSidebar"] .stMarkdown h1,
+section[data-testid="stSidebar"] .stMarkdown h2,
+section[data-testid="stSidebar"] .stMarkdown h3 {
+    color: #00F2FE;
+    font-weight: 700;
+}
+
+/* Brand Header */
+.brand-title {
+    font-size: 2.4rem;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    background: linear-gradient(135deg, #00F2FE 0%, #48CAE4 40%, #10B981 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 0.2rem;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.brand-subtitle {
+    font-size: 1.05rem;
+    color: #94A3B8;
+    margin-bottom: 1.5rem;
+    letter-spacing: 0.4px;
+    font-weight: 400;
+}
+
+/* Glassmorphism Metric Cards */
+.metric-card {
+    background: rgba(14, 23, 46, 0.72);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border: 1px solid rgba(0, 242, 254, 0.18);
+    border-radius: 16px;
+    padding: 1.25rem 1.4rem;
+    margin-bottom: 1.1rem;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.metric-card:hover {
+    border-color: rgba(0, 242, 254, 0.45);
+    transform: translateY(-2px);
+    box-shadow: 0 12px 30px rgba(0, 242, 254, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+.metric-label {
+    font-size: 0.8rem;
+    color: #94A3B8;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    font-weight: 600;
+    margin-bottom: 0.35rem;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.metric-value-huge {
+    font-size: 3.5rem;
+    font-weight: 800;
+    font-family: 'JetBrains Mono', monospace;
+    color: #00F2FE;
+    line-height: 1.1;
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    text-shadow: 0 0 25px rgba(0, 242, 254, 0.35);
+}
+
+.metric-unit {
+    font-size: 1.25rem;
+    color: #94A3B8;
+    font-weight: 500;
+    font-family: 'Inter', sans-serif;
+}
+
+.metric-value {
+    font-size: 1.7rem;
+    font-weight: 700;
+    font-family: 'JetBrains Mono', monospace;
+    color: #F8FAFC;
+    line-height: 1.2;
+}
+
+/* Pulsing Heart Animation */
+@keyframes heartBeat {
+    0% { transform: scale(1); filter: drop-shadow(0 0 2px rgba(239, 68, 68, 0.4)); }
+    14% { transform: scale(1.28); filter: drop-shadow(0 0 12px rgba(239, 68, 68, 0.8)); }
+    28% { transform: scale(1.02); filter: drop-shadow(0 0 4px rgba(239, 68, 68, 0.5)); }
+    42% { transform: scale(1.22); filter: drop-shadow(0 0 10px rgba(239, 68, 68, 0.7)); }
+    70% { transform: scale(1); filter: drop-shadow(0 0 2px rgba(239, 68, 68, 0.4)); }
+}
+
+.pulse-heart {
+    display: inline-block;
+    color: #EF4444;
+    animation: heartBeat 1.15s infinite ease-in-out;
+}
+
+.calibrating-icon {
+    display: inline-block;
+    color: #48CAE4;
+    animation: spinSlow 3s infinite linear;
+}
+
+@keyframes spinSlow {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+/* Status Badges */
+.badge-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 0.35rem 0.85rem;
+    border-radius: 30px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+}
+
+.badge-excellent {
+    background: rgba(16, 185, 129, 0.18);
+    color: #10B981;
+    border: 1px solid rgba(16, 185, 129, 0.5);
+    box-shadow: 0 0 10px rgba(16, 185, 129, 0.2);
+}
+
+.badge-good {
+    background: rgba(0, 242, 254, 0.18);
+    color: #00F2FE;
+    border: 1px solid rgba(0, 242, 254, 0.5);
+    box-shadow: 0 0 10px rgba(0, 242, 254, 0.2);
+}
+
+.badge-warning {
+    background: rgba(245, 158, 11, 0.18);
+    color: #F59E0B;
+    border: 1px solid rgba(245, 158, 11, 0.5);
+    box-shadow: 0 0 10px rgba(245, 158, 11, 0.2);
+}
+
+.badge-alert {
+    background: rgba(239, 68, 68, 0.18);
+    color: #EF4444;
+    border: 1px solid rgba(239, 68, 68, 0.5);
+    box-shadow: 0 0 10px rgba(239, 68, 68, 0.2);
+}
+
+.badge-profile {
+    background: rgba(139, 92, 246, 0.18);
+    color: #A78BFA;
+    border: 1px solid rgba(139, 92, 246, 0.5);
+}
+
+/* User Profile Badge Pill */
+.user-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(15, 23, 42, 0.7);
+    border: 1px solid rgba(0, 242, 254, 0.25);
+    border-radius: 30px;
+    padding: 0.35rem 0.9rem;
+    font-size: 0.85rem;
+    color: #E2E8F0;
+    font-weight: 500;
+}
+
+/* Cardiac Training Zone Bar */
+.zone-container {
+    margin-top: 14px;
+    padding-top: 12px;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.zone-label-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 6px;
+    font-size: 0.82rem;
+}
+
+.zone-name {
+    font-weight: 700;
+    letter-spacing: 0.4px;
+}
+
+.zone-meter {
+    height: 8px;
+    background: rgba(30, 41, 59, 0.8);
+    border-radius: 4px;
+    overflow: hidden;
+    display: flex;
+    gap: 2px;
+}
+
+.zone-segment {
+    flex: 1;
+    height: 100%;
+    opacity: 0.3;
+    transition: opacity 0.3s ease;
+}
+
+.zone-segment.active {
+    opacity: 1.0;
+    box-shadow: 0 0 8px currentColor;
+}
+
+.zone-seg-1 { background-color: #48CAE4; color: #48CAE4; }
+.zone-seg-2 { background-color: #10B981; color: #10B981; }
+.zone-seg-3 { background-color: #F59E0B; color: #F59E0B; }
+.zone-seg-4 { background-color: #F97316; color: #F97316; }
+.zone-seg-5 { background-color: #EF4444; color: #EF4444; }
+
+/* Custom Buttons */
+.stButton > button {
+    border-radius: 10px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    transition: all 0.25s ease;
+    border: 1px solid rgba(0, 242, 254, 0.25);
+    padding: 0.55rem 1.1rem;
+}
+
+.stButton > button:hover {
+    border-color: #00F2FE;
+    box-shadow: 0 0 16px rgba(0, 242, 254, 0.3);
+    transform: translateY(-1px);
+}
+
+/* Primary Button High-Tech Gradient */
+button[kind="primary"] {
+    background: linear-gradient(135deg, #00F2FE 0%, #0284C7 100%) !important;
+    color: #030712 !important;
+    font-weight: 700 !important;
+    border: none !important;
+    box-shadow: 0 4px 18px rgba(0, 242, 254, 0.35) !important;
+}
+
+button[kind="primary"]:hover {
+    background: linear-gradient(135deg, #38BDF8 0%, #0369A1 100%) !important;
+    box-shadow: 0 6px 24px rgba(0, 242, 254, 0.55) !important;
+    transform: translateY(-2px) !important;
+}
+
+/* Medical Disclaimer Footer Banner */
+.disclaimer-box {
+    background: rgba(15, 23, 42, 0.85);
+    border-left: 4px solid #F59E0B;
+    border-radius: 10px;
+    padding: 0.9rem 1.3rem;
+    margin-top: 2rem;
+    font-size: 0.82rem;
+    color: #94A3B8;
+    line-height: 1.5;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+}
+
+/* Input Fields & Select Boxes */
+div[data-baseweb="input"] {
+    background-color: rgba(14, 23, 46, 0.8) !important;
+    border: 1px solid rgba(0, 242, 254, 0.2) !important;
+    border-radius: 8px !important;
+    color: #F8FAFC !important;
+}
+
+div[data-baseweb="select"] {
+    background-color: rgba(14, 23, 46, 0.8) !important;
+    border-radius: 8px !important;
+}

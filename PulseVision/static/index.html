@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OmniVitals — Contactless Heart Rate Analytics</title>
+  <link rel="stylesheet" href="/static/styles.css">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2300F2FE' stroke-width='2'><path d='M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z'/><path d='M3.22 12H7l2-4 3 8 2-5 1.5 2.5 1.5-1.5H20.78'/></svg>">
+</head>
+<body>
+  <div class="app-container">
+    
+    <!-- ====================================================================
+         GLOBAL SIDEBAR (OmniVitals Navigation)
+         ==================================================================== -->
+    <aside class="sidebar">
+      <!-- Brand Logo Header -->
+      <div class="brand-header" onclick="navigateTo('home')">
+        <svg class="brand-logo-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/>
+          <path d="M3.22 12H7l2-4 3 8 2-5 1.5 2.5 1.5-1.5H20.78"/>
+        </svg>
+        <span class="brand-title">OmniVitals</span>
+      </div>
+
+      <!-- Navigation Menu -->
+      <nav class="nav-menu">
+        <a class="nav-item active" data-page="home" onclick="navigateTo('home')">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+            <polyline points="9 22 9 12 15 12 15 22"/>
+          </svg>
+          <span>Home</span>
+        </a>
+
+        <a class="nav-item" data-page="monitor" onclick="navigateTo('monitor')">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+          </svg>
+          <span>Live Monitor</span>
+        </a>
+
+        <a class="nav-item" data-page="analytics" onclick="navigateTo('analytics')">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="20" x2="18" y2="10"/>
+            <line x1="12" y1="20" x2="12" y2="4"/>
+            <line x1="6" y1="20" x2="6" y2="14"/>
+          </svg>
+          <span>Analytics</span>
+        </a>
+
+        <a class="nav-item" data-page="history" onclick="navigateTo('history')">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+            <polyline points="14 2 14 8 20 8"/>
+            <line x1="16" y1="13" x2="8" y2="13"/>
+            <line x1="16" y1="17" x2="8" y2="17"/>
+            <polyline points="10 9 9 9 8 9"/>
+          </svg>
+          <span>History & Reports</span>
+        </a>
+
+        <a class="nav-item" data-page="settings" onclick="navigateTo('settings')">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="3"/>
+            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+          </svg>
+          <span>Settings</span>
+        </a>
+      </nav>
+
+      <!-- Sidebar Footer Badge Card -->
+      <div class="sidebar-footer-card">
+        <div class="footer-icon-badge">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/>
+          </svg>
+        </div>
+        <div>
+          <div class="footer-text-primary">Your Health.</div>
+          <div class="footer-text-primary">Our Priority.</div>
+          <div class="footer-text-secondary">Contactless. Safe. Convenient.</div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- ====================================================================
+         MAIN APP CONTENT AREA
+         ==================================================================== -->
+    <main class="main-content">
+
+      <!-- ------------------------------------------------------------------
+           PAGE 1: HOME
+           ------------------------------------------------------------------ -->
+      <section id="view-home" class="page-view active">
+        <div class="home-layout">
+          
+          <div class="home-hero-split">
+            <!-- Left Hero Text & CTA -->
+            <div class="home-hero-left">
+              <svg class="home-brand-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/>
+                <path d="M3.22 12H7l2-4 3 8 2-5 1.5 2.5 1.5-1.5H20.78"/>
+              </svg>
+              <h1 class="home-brand-title">OmniVitals</h1>
+              <h2 class="home-subtitle">Monitor Your Heart Rate — Contactless</h2>
+              <p class="home-desc">
+                OmniVitals uses your webcam and advanced computer vision to measure your heart rate, 
+                simply by analyzing subtle changes in your facial skin color.
+              </p>
+              <button class="btn btn-primary home-cta-btn" onclick="navigateTo('monitor'); startMonitoring();">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                  <polygon points="5 3 19 12 5 21 5 3"/>
+                </svg>
+                <span>Start Monitoring</span>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                  <polyline points="9 18 15 12 9 6"/>
+                </svg>
+              </button>
+            </div>
+
+            <!-- Right Hero: 3D Face Wireframe & Tips Card -->
+            <div class="home-hero-right">
+              <div class="card face-wireframe-card">
+                <canvas id="wireframeCanvas"></canvas>
+              </div>
+
+              <div class="card results-tips-card">
+                <h4>For best results:</h4>
+                <ul class="tips-list">
+                  <li>
+                    <svg class="tip-check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <circle cx="12" cy="12" r="10"/>
+                      <polyline points="12 8 12 12 14 14"/>
+                    </svg>
+                    <span>Use good lighting (natural light is ideal)</span>
+                  </li>
+                  <li>
+                    <svg class="tip-check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <circle cx="12" cy="12" r="10"/>
+                      <polyline points="12 8 12 12 14 14"/>
+                    </svg>
+                    <span>Keep your face centered in the frame</span>
+                  </li>
+                  <li>
+                    <svg class="tip-check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <circle cx="12" cy="12" r="10"/>
+                      <polyline points="12 8 12 12 14 14"/>
+                    </svg>
+                    <span>Stay still and avoid excessive movement</span>
+                  </li>
+                  <li>
+                    <svg class="tip-check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <circle cx="12" cy="12" r="10"/>
+                      <polyline points="12 8 12 12 14 14"/>
+                    </svg>
+                    <span>Remove glasses or face coverings</span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <!-- Bottom Features Row (3 Badges) -->
+          <div class="home-features-row">
+            <div class="feature-badge-card">
+              <div class="feature-icon-circle">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+                  <circle cx="12" cy="13" r="4"/>
+                </svg>
+              </div>
+              <div class="feature-text">
+                <h5>No extra hardware</h5>
+                <p>Just your webcam</p>
+              </div>
+            </div>
+
+            <div class="feature-badge-card active-feature">
+              <div class="feature-icon-circle">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="4" y="4" width="16" height="16" rx="2"/>
+                  <rect x="9" y="9" width="6" height="6"/>
+                  <line x1="9" y1="1" x2="9" y2="4"/>
+                  <line x1="15" y1="1" x2="15" y2="4"/>
+                  <line x1="9" y1="20" x2="9" y2="23"/>
+                  <line x1="15" y1="20" x2="15" y2="23"/>
+                  <line x1="20" y1="9" x2="23" y2="9"/>
+                  <line x1="20" y1="14" x2="23" y2="14"/>
+                  <line x1="1" y1="9" x2="4" y2="9"/>
+                  <line x1="1" y1="14" x2="4" y2="14"/>
+                </svg>
+              </div>
+              <div class="feature-text">
+                <h5>AI-powered</h5>
+                <p>Computer vision + rPPG</p>
+              </div>
+            </div>
+
+            <div class="feature-badge-card">
+              <div class="feature-icon-circle">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="10"/>
+                  <polyline points="12 6 12 12 16 14"/>
+                </svg>
+              </div>
+              <div class="feature-text">
+                <h5>Fast & accurate</h5>
+                <p>Real-time analysis</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Privacy Matters Banner -->
+          <div class="card privacy-banner-card">
+            <div class="privacy-lock-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+              </svg>
+            </div>
+            <div class="privacy-text">
+              <h4>Your privacy matters</h4>
+              <p>We don't store your video. All data is processed locally and only used for this session.</p>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ------------------------------------------------------------------
+           PAGE 2: LIVE MONITOR
+           ------------------------------------------------------------------ -->
+      <section id="view-monitor" class="page-view">
+        <div class="live-monitor-layout">
+          
+          <!-- Top Header -->
+          <div class="view-header">
+            <div class="view-title-group">
+              <h1>Live Heart Rate Monitor</h1>
+              <p>Real-time tracking • AI powered • Contactless</p>
+            </div>
+            <div style="display: flex; align-items: center; gap: 14px;">
+              <select id="cameraSelect" class="select-box" onchange="onCameraChange(this.value)">
+                <option value="0">Webcam (Integrated)</option>
+              </select>
+              <div class="recording-pill">
+                <span class="red-dot"></span>
+                <span>Session Time <span id="sessionTimerText">00:02:34</span></span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Top Grid: Webcam Feed + Status Checklist + Heart Rate/Quality -->
+          <div class="live-top-grid">
+            <!-- Left: Video Feed -->
+            <div class="card video-container-card">
+              <img id="liveVideoFeed" class="video-stream-img" src="/api/video_feed" alt="OmniVitals Live Camera Feed">
+            </div>
+
+            <!-- Middle: Face Diagnostic Status Checklist -->
+            <div class="card live-status-card">
+              <div class="status-metric-item">
+                <span class="status-metric-label">Face Tracking</span>
+                <span id="statFaceTracking" class="status-metric-val val-green">
+                  <span class="check-dot"></span> Tracking
+                </span>
+              </div>
+
+              <div class="status-metric-item">
+                <span class="status-metric-label">Face Position</span>
+                <span id="statFacePosition" class="status-metric-val val-blue">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> Centered ✓
+                </span>
+              </div>
+
+              <div class="status-metric-item">
+                <span class="status-metric-label">Lighting</span>
+                <span id="statLighting" class="status-metric-val val-green">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/></svg> Good ✓
+                </span>
+              </div>
+
+              <div class="status-metric-item">
+                <span class="status-metric-label">Landmarks</span>
+                <span id="statLandmarks" class="status-metric-val val-green">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Detected ✓
+                </span>
+              </div>
+            </div>
+
+            <!-- Right: Heart Rate & Signal Quality Cards -->
+            <div class="live-kpi-col">
+              <div class="card bpm-display-card">
+                <div class="bpm-card-header">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
+                  <span>Heart Rate</span>
+                </div>
+                <div class="bpm-value-row">
+                  <div>
+                    <span id="liveBpmValue" class="bpm-huge-number">72</span>
+                    <span class="bpm-unit">BPM</span>
+                  </div>
+                  <svg class="live-ecg-svg" viewBox="0 0 100 40" fill="none">
+                    <path d="M 0 20 L 25 20 L 32 5 L 40 35 L 48 10 L 55 28 L 62 20 L 100 20" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </div>
+              </div>
+
+              <div class="card quality-display-card">
+                <div class="quality-header-label">Signal Quality</div>
+                <div id="liveQualityText" class="quality-category-text">Good</div>
+                <div class="progress-track-wrapper">
+                  <div class="progress-track">
+                    <div id="liveQualityProgress" class="progress-fill-cyan" style="width: 78%;"></div>
+                  </div>
+                  <span id="liveQualityPct" class="progress-pct-label">78%</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Middle Row: Waveform Charts (2 Equal Width Cards) -->
+          <div class="waveforms-two-col">
+            <div class="card">
+              <div class="card-title">
+                <span>Raw Signal (RGB Channels)</span>
+                <div class="legend-group">
+                  <span><span class="legend-dot" style="background: #FF5A87;"></span>R</span>
+                  <span><span class="legend-dot" style="background: #00F2FE;"></span>G</span>
+                  <span><span class="legend-dot" style="background: #3B82F6;"></span>B</span>
+                </div>
+              </div>
+              <canvas id="rawSignalsCanvas" class="waveform-canvas"></canvas>
+            </div>
+
+            <div class="card">
+              <div class="card-title">
+                <span>Filtered Pulse Signal (rPPG)</span>
+              </div>
+              <canvas id="pulseSignalCanvas" class="waveform-canvas"></canvas>
+            </div>
+          </div>
+
+          <!-- Lower Row: Diagnostics (3 Equal Cards) -->
+          <div class="diagnostics-three-col">
+            <!-- BPM Trend -->
+            <div class="card">
+              <div class="card-title">
+                <span>BPM Trend</span>
+                <select class="select-box" style="padding: 2px 8px; font-size: 0.78rem;">
+                  <option>72 BPM</option>
+                </select>
+              </div>
+              <canvas id="bpmTrendCanvas" class="waveform-canvas"></canvas>
+            </div>
+
+            <!-- Frequency Spectrum -->
+            <div class="card">
+              <div class="card-title">
+                <span>Frequency Spectrum</span>
+                <span id="spectrumPeakLabel" class="peak-tag">1.20 Hz (72 BPM)</span>
+              </div>
+              <canvas id="spectrumCanvas" class="spectrum-canvas"></canvas>
+            </div>
+
+            <!-- Signal Quality Donut & Checklist -->
+            <div class="card">
+              <div class="card-title">
+                <span>Signal Quality</span>
+              </div>
+              <div class="donut-gauge-layout">
+                <div class="radial-meter-container">
+                  <canvas id="radialQualityCanvas" width="95" height="95"></canvas>
+                  <div id="radialCenterPct" class="radial-center-text">78%</div>
+                </div>
+                <ul class="quality-checks-list">
+                  <li><span class="check-dot"></span> Face detected</li>
+                  <li><span class="check-dot"></span> Stable lighting</li>
+                  <li><span class="check-dot"></span> Low motion</li>
+                  <li><span class="check-dot"></span> Good signal</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <!-- Bottom Action Bar (5 Control Buttons) -->
+          <div class="action-controls-bar">
+            <button id="btnStart" class="btn btn-start" onclick="startMonitoring()">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+              <span>Start</span>
+            </button>
+
+            <button id="btnPause" class="btn btn-pause" onclick="pauseMonitoring()">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
+              <span>Pause</span>
+            </button>
+
+            <button id="btnResume" class="btn btn-resume" onclick="resumeMonitoring()">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+              <span>Resume</span>
+            </button>
+
+            <button id="btnStop" class="btn btn-stop" onclick="stopMonitoring()">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><rect x="4" y="4" width="16" height="16"/></svg>
+              <span>Stop</span>
+            </button>
+
+            <button id="btnRestart" class="btn btn-restart" onclick="restartMonitoring()">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+              <span>Restart</span>
+            </button>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ------------------------------------------------------------------
+           PAGE 3: ANALYTICS
+           ------------------------------------------------------------------ -->
+      <section id="view-analytics" class="page-view">
+        <div class="analytics-layout">
+          
+          <div class="view-header">
+            <div class="view-title-group">
+              <h1>Analytics</h1>
+              <p>Insights from your heart rate data</p>
+            </div>
+            <select class="select-box" onchange="loadAnalyticsData(this.value)">
+              <option value="7days">Last 7 days</option>
+              <option value="30days">Last 30 days</option>
+              <option value="all">All time</option>
+            </select>
+          </div>
+
+          <!-- 4 KPI Cards -->
+          <div class="kpi-four-cards-row">
+            <div class="card kpi-card">
+              <div class="kpi-label">Average BPM</div>
+              <div class="kpi-value-row">
+                <div>
+                  <span id="kpiAvgBpm" class="kpi-number">72</span>
+                  <span class="kpi-unit">bpm</span>
+                </div>
+                <svg class="kpi-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/>
+                </svg>
+              </div>
+            </div>
+
+            <div class="card kpi-card">
+              <div class="kpi-label">Minimum BPM</div>
+              <div class="kpi-value-row">
+                <div>
+                  <span id="kpiMinBpm" class="kpi-number">58</span>
+                  <span class="kpi-unit">bpm</span>
+                </div>
+                <svg class="kpi-icon" style="color: #00F2FE;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                  <line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/>
+                </svg>
+              </div>
+            </div>
+
+            <div class="card kpi-card">
+              <div class="kpi-label">Maximum BPM</div>
+              <div class="kpi-value-row">
+                <div>
+                  <span id="kpiMaxBpm" class="kpi-number">98</span>
+                  <span class="kpi-unit">bpm</span>
+                </div>
+                <svg class="kpi-icon" style="color: #EF4444;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                  <line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/>
+                </svg>
+              </div>
+            </div>
+
+            <div class="card kpi-card">
+              <div class="kpi-label">Session Duration</div>
+              <div class="kpi-value-row">
+                <div>
+                  <span id="kpiDuration" class="kpi-number">12:34</span>
+                  <span class="kpi-unit">min</span>
+                </div>
+                <svg class="kpi-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+                </svg>
+              </div>
+            </div>
+          </div>
+
+          <!-- Middle Row: Heart Rate Trend & Signal Quality Donut -->
+          <div class="analytics-two-col-row">
+            <div class="card">
+              <div class="card-title">
+                <span>Heart Rate Trend</span>
+                <div style="display: flex; align-items: center; gap: 14px;">
+                  <span style="font-size: 0.8rem; color: var(--text-secondary);"><span class="legend-dot" style="background: var(--cyan-primary);"></span>BPM</span>
+                  <select class="select-box" style="padding: 2px 8px; font-size: 0.78rem;">
+                    <option>Last 7 days</option>
+                  </select>
+                </div>
+              </div>
+              <canvas id="trendChartCanvas" class="analytics-canvas"></canvas>
+            </div>
+
+            <div class="card">
+              <div class="card-title">
+                <span>Signal Quality</span>
+              </div>
+              <div style="display: flex; align-items: center; justify-content: space-around; height: 190px;">
+                <div style="position: relative; width: 130px; height: 130px;">
+                  <canvas id="analyticsDonutCanvas" width="130" height="130"></canvas>
+                  <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-family: var(--font-mono); font-size: 1.45rem; font-weight: 800; color: #FFFFFF;">85%</div>
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 10px; font-size: 0.84rem;">
+                  <div style="display: flex; align-items: center; gap: 8px;">
+                    <span class="legend-dot" style="background: var(--emerald-green);"></span>
+                    <span style="color: var(--text-secondary);">Good signal</span>
+                    <b style="color: #FFFFFF; margin-left: auto;">78%</b>
+                  </div>
+                  <div style="display: flex; align-items: center; gap: 8px;">
+                    <span class="legend-dot" style="background: var(--amber-warning);"></span>
+                    <span style="color: var(--text-secondary);">Moderate signal</span>
+                    <b style="color: #FFFFFF; margin-left: auto;">15%</b>
+                  </div>
+                  <div style="display: flex; align-items: center; gap: 8px;">
+                    <span class="legend-dot" style="background: var(--coral-red);"></span>
+                    <span style="color: var(--text-secondary);">Poor signal</span>
+                    <b style="color: #FFFFFF; margin-left: auto;">7%</b>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Bottom Row: BPM Distribution & Session Comparison -->
+          <div class="analytics-equal-two-col">
+            <div class="card">
+              <div class="card-title">
+                <span>BPM Distribution</span>
+                <span style="font-size: 0.8rem; color: var(--text-secondary);"><span class="legend-dot" style="background: var(--cyan-primary);"></span>BPM</span>
+              </div>
+              <canvas id="bpmDistCanvas" class="analytics-canvas"></canvas>
+            </div>
+
+            <div class="card">
+              <div class="card-title">
+                <span>Session Comparison</span>
+                <div class="legend-group">
+                  <span><span class="legend-dot" style="background: var(--cyan-primary);"></span>Session 1</span>
+                  <span><span class="legend-dot" style="background: #C084FC;"></span>Session 2</span>
+                </div>
+              </div>
+              <canvas id="sessCompCanvas" class="analytics-canvas"></canvas>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ------------------------------------------------------------------
+           PAGE 4: HISTORY & REPORTS (Session History)
+           ------------------------------------------------------------------ -->
+      <section id="view-history" class="page-view">
+        <div class="history-layout">
+          
+          <div class="view-header">
+            <div class="view-title-group">
+              <h1>Session History</h1>
+              <p>View, manage and export your heart rate sessions</p>
+            </div>
+            <button class="btn btn-outline-red" onclick="clearAllSessions()">
+              <span>Clear All</span>
+            </button>
+          </div>
+
+          <!-- Sessions Table Card -->
+          <div class="card sessions-table-card">
+            <table class="sessions-table">
+              <thead>
+                <tr>
+                  <th>Date & Time</th>
+                  <th>Duration</th>
+                  <th>Avg BPM</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="sessionsTableBody">
+                <!-- Dynamically rendered rows -->
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Bottom Action Cards (Export Data & Generate Report) -->
+          <div class="history-export-row">
+            <div class="card">
+              <div class="export-card-content">
+                <h4 style="font-size: 1.05rem; font-weight: 700; color: #FFFFFF;">Export Data</h4>
+                <p>Download your session data for further analysis.</p>
+                <div class="export-btn-group">
+                  <button class="btn btn-primary" onclick="exportData('csv')">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                    <span>Export CSV</span>
+                  </button>
+                  <button class="btn btn-purple" onclick="exportData('pdf')">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                    <span>Export PDF</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="export-card-content">
+                <h4 style="font-size: 1.05rem; font-weight: 700; color: #FFFFFF;">Generate Report</h4>
+                <p>Create a detailed PDF report with graphs and statistics.</p>
+                <div class="export-btn-group">
+                  <button class="btn btn-resume" style="padding: 10px 24px;" onclick="exportData('pdf')">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+                    <span>Generate PDF</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ------------------------------------------------------------------
+           PAGE 5: SETTINGS
+           ------------------------------------------------------------------ -->
+      <section id="view-settings" class="page-view">
+        <div class="settings-layout">
+          
+          <div class="view-header">
+            <div class="view-title-group">
+              <h1>Settings</h1>
+              <p>Customize your monitoring experience</p>
+            </div>
+          </div>
+
+          <!-- Section 1: Camera Settings -->
+          <div class="card settings-section-card">
+            <div class="settings-section-header">Camera Settings</div>
+            <div class="camera-settings-grid">
+              <div>
+                <div class="form-group">
+                  <label class="form-label">Camera Selection</label>
+                  <select id="settingCameraSelect" class="select-box" style="width: 100%;" onchange="updateSettingsField('camera_index', this.value)">
+                    <option value="0">Integrated Webcam (Default)</option>
+                  </select>
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label">Resolution</label>
+                  <select id="settingResolutionSelect" class="select-box" style="width: 100%;" onchange="updateSettingsField('camera_resolution', this.value)">
+                    <option value="640x480">640 × 480</option>
+                    <option value="1280x720">1280 × 720</option>
+                  </select>
+                </div>
+              </div>
+
+              <!-- Camera Preview Thumbnail Box -->
+              <div class="camera-preview-box">
+                <img id="settingsPreviewImg" class="camera-preview-thumb" src="/api/video_feed" alt="Camera Preview">
+              </div>
+            </div>
+          </div>
+
+          <!-- Section 2: Processing & Algorithm -->
+          <div class="card settings-section-card">
+            <div class="settings-section-header">Processing & Algorithm</div>
+            <div class="two-col-form-row">
+              <div class="form-group">
+                <label class="form-label">Algorithm</label>
+                <select id="settingAlgorithmSelect" class="select-box" style="width: 100%;" onchange="updateSettingsField('algorithm', this.value)">
+                  <option value="POS">POS (Recommended)</option>
+                  <option value="ADAPTIVE (Ensemble)">ADAPTIVE (Ensemble)</option>
+                  <option value="CHROM">CHROM</option>
+                  <option value="GREEN">GREEN</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">Measurement Duration</label>
+                <select id="settingDurationSelect" class="select-box" style="width: 100%;" onchange="updateSettingsField('duration_sec', this.value)">
+                  <option value="60">60 seconds</option>
+                  <option value="30">30 seconds</option>
+                  <option value="120">120 seconds</option>
+                  <option value="0">Continuous</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <!-- Section 3: Display Settings -->
+          <div class="card settings-section-card">
+            <div class="settings-section-header">Display Settings</div>
+            <div class="two-col-form-row" style="margin-bottom: 12px;">
+              <div class="form-group">
+                <label class="form-label">Signal Window</label>
+                <select id="settingWindowSelect" class="select-box" style="width: 100%;" onchange="updateSettingsField('signal_window_sec', this.value)">
+                  <option value="30">30 seconds</option>
+                  <option value="15">15 seconds</option>
+                  <option value="60">60 seconds</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">Graph Refresh Interval</label>
+                <select id="settingRefreshSelect" class="select-box" style="width: 100%;" onchange="updateSettingsField('refresh_interval_sec', this.value)">
+                  <option value="1">1 second</option>
+                  <option value="0.5">0.5 seconds</option>
+                  <option value="2">2 seconds</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="toggle-row">
+              <span class="toggle-label-text">Show Landmark Mesh</span>
+              <label class="switch">
+                <input id="toggleLandmarkMesh" type="checkbox" checked onchange="updateSettingsField('show_landmark_mesh', this.checked)">
+                <span class="slider"></span>
+              </label>
+            </div>
+
+            <div class="toggle-row">
+              <span class="toggle-label-text">Show Signal Graphs</span>
+              <label class="switch">
+                <input id="toggleSignalGraphs" type="checkbox" checked onchange="updateSettingsField('show_signal_graphs', this.checked)">
+                <span class="slider"></span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Section 4: Session & Privacy -->
+          <div class="card settings-section-card">
+            <div class="settings-section-header">Session & Privacy</div>
+            
+            <div class="session-privacy-row">
+              <div style="display: flex; gap: 32px; align-items: center;">
+                <div style="display: flex; align-items: center; gap: 12px;">
+                  <span class="toggle-label-text">Save Sessions</span>
+                  <label class="switch">
+                    <input id="toggleSaveSessions" type="checkbox" checked onchange="updateSettingsField('save_sessions', this.checked)">
+                    <span class="slider"></span>
+                  </label>
+                </div>
+
+                <div style="display: flex; align-items: center; gap: 12px;">
+                  <span class="toggle-label-text">Auto Export (CSV)</span>
+                  <label class="switch">
+                    <input id="toggleAutoExport" type="checkbox" onchange="updateSettingsField('auto_export_csv', this.checked)">
+                    <span class="slider"></span>
+                  </label>
+                </div>
+              </div>
+
+              <button class="btn btn-outline-red" onclick="clearAllSessions()">
+                <span>Clear All Data</span>
+              </button>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- Client Application Logic -->
+  <script src="/static/app.js"></script>
+</body>
+</html>
